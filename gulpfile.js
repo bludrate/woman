@@ -16,26 +16,45 @@ var stylus = require('gulp-stylus');
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
-            baseDir: "./client/"
+            baseDir: "./"
         }
     });
 });
 
+gulp.task('js', function() {
+    gulp.src([
+            './public/js/utils/*.js',
+            './public/js/components/*.js',
+            './public/js/*.js',
+            '!./public/js/main.js'
+        ])
+        .pipe(concat('main.js'))
+        .pipe(gulp.dest('./public/js/'));
+});
+
 gulp.task('styles', function() {
-    gulp.src('./client/styles/main.styl')
+    gulp.src('./public/styles/main.styl')
         .pipe(stylus({
             compress: true
         }))
-        .pipe(gulp.dest('./client/styles/'))
+        .pipe(gulp.dest('./public/styles/'))
         .pipe(browserSync.stream());
 });
 
 gulp.task('watch', function() {
-    watch('./client/styles/**/*.styl', function() {
+    watch('./public/styles/**/*.styl', function() {
         gulp.run('styles');
     });
 
-    watch('./client/index.html', function() {
+    watch('./html/*.html', function() {
+        browserSync.reload();
+    });
+
+    watch(['./public/js/**/*.js', '!./public/js/main.js'], function() {
+        gulp.run('js');
+    });
+
+    watch('./public/js/main.js', function() {
         browserSync.reload();
     });
 });
@@ -48,7 +67,7 @@ gulp.task('default', function() {
 
 /*
 var config = {
-    tags: './client/!**!/!*.tag',
+    tags: './public/!**!/!*.tag',
     tagsDist: './client/js'
 };
 

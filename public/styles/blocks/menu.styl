@@ -1,0 +1,71 @@
+$buttonW = 40px;
+$menuW = 200px;
+
+.menu-button {
+	vertical-align: top;
+	display: inline-block;
+	background: none;
+	width: $buttonW;
+	height: $buttonW;
+	border-radius: 2px;
+	border: none;
+	box-sizing: border-box;
+	padding: 0 8px;
+}
+
+.hamburger {
+	display: block;
+	width: 24px;
+	background: $white;
+	position: relative;
+	height: 4px;
+	border-radius: 2px;
+
+	&:after,
+	&:before {
+		border-radius: 2px;
+		position: absolute;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		content: '';
+		background: $white;
+	}
+
+	&:before {
+		top: -7px;
+	}
+
+	&:after {
+		bottom: -7px;
+	}
+}
+
+.menu {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	overflow: auto;
+	width: $menuW;
+	background: $accent;
+
+	a {
+		display: block
+		font-size: 16px;
+		height: 40px;
+		text-decoration: none;
+		color: $white;
+		line-height: 40px;
+		padding: 0 0 0 15px;
+		border-bottom: 1px solid $accentLight;
+	}
+}
+
+.wrapper {
+	transition: transform 0.15s;
+}
+
+.menu-active {
+	transform: translateX($menuW);
+}

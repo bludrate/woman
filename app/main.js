@@ -5,8 +5,6 @@ var express = require('express'),
     pages = require('./controllers/pages'),
     app = express();
 
-console.log(pages);
-
 app.engine('ejs', ejsLocals);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
