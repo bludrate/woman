@@ -1,21 +1,21 @@
-$buttonW = 40px;
-$menuW = 200px;
+$buttonW = 50px;
+$menuW = 260px;
+$hamW = 24px;
 
 .menu-button {
-	vertical-align: top;
-	display: inline-block;
+	float: left;
 	background: none;
 	width: $buttonW;
-	height: $buttonW;
+	height: $headerH;
 	border-radius: 2px;
 	border: none;
 	box-sizing: border-box;
-	padding: 0 8px;
+	padding: 0 (($buttonW - $hamW) / 2);
 }
 
 .hamburger {
 	display: block;
-	width: 24px;
+	width: $hamW;
 	background: $white;
 	position: relative;
 	height: 4px;
@@ -48,7 +48,7 @@ $menuW = 200px;
 	height: 100%;
 	overflow: auto;
 	width: $menuW;
-	background: $accent;
+	background: darken($accent, 10%);
 
 	a {
 		display: block
@@ -58,14 +58,35 @@ $menuW = 200px;
 		color: $white;
 		line-height: 40px;
 		padding: 0 0 0 15px;
-		border-bottom: 1px solid $accentLight;
+		border-bottom: 1px dashed $accentLight;
+		
+		&.hover {
+			background: rgba($dark, 0.5)
+		}
+	}
+}
+
+.menu-page-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba($dark, 0.4);
+	display: none;
+	z-index: 200;
+
+	.menu-active & {
+		display: block;
 	}
 }
 
 .wrapper {
 	transition: transform 0.15s;
+	transform: translate3d(0,0,0);
 }
 
 .menu-active {
 	transform: translateX($menuW);
+	box-shadow: 0 0 3px black;
 }

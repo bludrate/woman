@@ -17,12 +17,15 @@ gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
             baseDir: "./"
-        }
+        },
+        ghostMode: false,
+        notify: false
     });
 });
 
 gulp.task('js', function() {
     gulp.src([
+            './public/js/libs/*.js',
             './public/js/utils/*.js',
             './public/js/components/*.js',
             './public/js/*.js',

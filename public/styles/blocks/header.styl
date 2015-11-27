@@ -1,9 +1,71 @@
 $headerH = 40px;
 .header {
-	background: $accentLight;
+	background: $accent;
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: $headerH;
+	text-align: center;
+	z-index: 150;
+	box-shadow: 0 0 2px $black;
+}
+
+.search {
+	width: 100%;
+	position: absolute;
+	right: 50px;
+	top: $headerH;
+	overflow: hidden;
+	left: 0;
+	height: 35px;
+	display: none;
+	box-shadow: 0 0 2px $black;
+	z-index: 100;
+
+	&.active {
+		display: block;
+	}
+
+	&__input {
+		box-shadow: 0 0 1px inset;
+		border: none;
+		height: 100%;
+		padding: 0 0 0 10px;
+		margin: 0;
+		background: $white;
+		width: 100%;
+		box-sizing: border-box;
+		text-transform: uppercase;
+		font-size: 14px;
+		border-radius: 0;
+		outline: none;
+	}
+
+	&__button {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 30%;
+		box-sizing: border-box;
+		border: none;
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		text-transform: uppercase;
+		color: $white;
+		background: $buttonBG;
+		font-size: 14px;
+	}
+}
+
+.icon-search {
+	float: right;
+	width: 50px;
+	height: $headerH;
+	background: none;
+	border: none;
+	color: $white;
+	font-size: 24px;
+	padding: 0;
 }

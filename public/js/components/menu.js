@@ -4,9 +4,15 @@
         var wrapper = document.querySelector('.wrapper');
 
         document.querySelector('.menu-button').addEventListener('click', function() {
-            menu.classList.toggle('active');
+            menu.classList.add('active');
 
-            wrapper.classList.toggle('menu-active', menu.classList.contains('active'));
+            wrapper.classList.add('menu-active');
+        });
+
+        document.querySelector('.menu-page-overlay').addEventListener('click', function() {
+            menu.classList.remove('active');
+
+            wrapper.classList.remove('menu-active');
         });
     }
 })(window);
