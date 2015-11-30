@@ -89,11 +89,11 @@ var SampleApp = function() {
         self.app.use('/public', express.static(__dirname + '/../public'));
 
         self.app.get('/', function (req, res) {
-            res.redirect('home')
+            res.redirect('home');
         });
 
         self.app.get('/console', function(req, res) {
-            res.send(process.env.OPENSHIFT_MYSQL_DB_HOST);
+            res.send('console');
         });
 
         for (var page in pages) {
