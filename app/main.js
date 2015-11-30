@@ -9,7 +9,8 @@ app.engine('ejs', ejsLocals);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.use(express.static('../static'));
+//app.use(express.compress());
+app.use('/public', express.static(__dirname + '/../public'));
 
 app.get('/', function (req, res) {
     res.redirect('home')
