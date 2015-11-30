@@ -13,6 +13,14 @@ var jsonminify = require('gulp-jsonminify');
 var browserSync = require('browser-sync').create();
 var stylus = require('gulp-stylus');
 
+var jsSrc = [
+    './public/js/libs/*.js',
+    './public/js/utils/*.js',
+    './public/js/components/*.js',
+    './public/js/*.js',
+    '!./public/js/main.js'
+];
+
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
@@ -24,13 +32,7 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('js', function() {
-    gulp.src([
-            './public/js/libs/*.js',
-            './public/js/utils/*.js',
-            './public/js/components/*.js',
-            './public/js/*.js',
-            '!./public/js/main.js'
-        ])
+    gulp.src(jsSrc)
         .pipe(concat('main.js'))
         .pipe(gulp.dest('./public/js/'));
 });
@@ -68,6 +70,48 @@ gulp.task('default', function() {
     gulp.run('watch');
 });
 
+gulp.task('build', function() {
+    return runSequence('build.clean', ['build.js', 'build.copy.fonts', 'build.copy.images', 'build.copy.app.js', 'build.copy.app', 'build.styles']);
+});
+
+gulp.task('build.clean', function() {
+    return gulp.src('../build/public/')
+        .pipe(clean({force: true}));
+});
+
+gulp.task('build.js', function() {
+    return gulp.src(jsSrc)
+        .pipe(concat('main.js'))
+        .pipe(gulp.dest('../build/public/js/'));
+});
+
+gulp.task('build.copy.fonts', function() {
+    return gulp.src('./public/fonts/**')
+        .pipe(gulp.dest('../build/public/fonts/'));
+});
+
+gulp.task('build.copy.images', function() {
+    return gulp.src('./public/images/**')
+        .pipe(gulp.dest('../build/public/images/'));
+});
+
+gulp.task('build.copy.app.js', function() {
+    return gulp.src('./app.js')
+        .pipe(gulp.dest('../build/'));
+});
+
+gulp.task('build.copy.app', function() {
+    return gulp.src('./app/**')
+        .pipe(gulp.dest('../build/app'));
+});
+
+gulp.task('build.styles', function() {
+    gulp.src('./public/styles/main.styl')
+        .pipe(stylus({
+            compress: true
+        }))
+        .pipe(gulp.dest('../build/public/styles/'));
+});
 /*
 var config = {
     tags: './public/!**!/!*.tag',
