@@ -5,6 +5,7 @@ var fs      = require('fs');
 var ejsLocals = require('ejs-locals');
 var pages = require('./controllers/pages');
 var app = express();
+var db = require('./database');
 
 
 /**
@@ -91,6 +92,9 @@ var SampleApp = function() {
             res.redirect('home')
         });
 
+        self.app.get('/console', function() {
+            res.write(process.env.OPENSHIFT_MYSQL_DB_HOST);
+        });
         for (var page in pages) {
             self.app.get('/' + page, pages[page]);
         }
