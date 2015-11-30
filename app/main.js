@@ -92,9 +92,10 @@ var SampleApp = function() {
             res.redirect('home')
         });
 
-        self.app.get('/console', function() {
+        self.app.get('/console', function(req, res) {
             res.write(process.env.OPENSHIFT_MYSQL_DB_HOST);
         });
+
         for (var page in pages) {
             self.app.get('/' + page, pages[page]);
         }
