@@ -93,7 +93,7 @@ var SampleApp = function() {
         });
 
         self.app.get('/console', function(req, res) {
-            res.send('console');
+            res.send(process.env.OPENSHIFT_MYSQL_DB_HOST);
         });
 
         for (var page in pages) {
