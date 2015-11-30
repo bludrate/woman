@@ -20,4 +20,4 @@ for (var page in pages) {
     app.get('/' + page, pages[page]);
 }
 
-app.listen(8080);
+app.listen(80);
