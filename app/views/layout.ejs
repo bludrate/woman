@@ -7,6 +7,10 @@
     <title><%=title%></title>
 </head>
 <body>
+    <%- include blocks/nav.ejs %>
     <%- body -%>
+
+    <script>document.write('<link rel="stylesheet" href="/public/styles/main.css"/>');</script>
+    <script src="/public/js/main.js"></script>
 </body>
 </html>

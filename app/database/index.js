@@ -1,8 +1,8 @@
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
-    host     : 'mysql://adminjrn4b82:5f6faxtw76eX@127.0.250.1:3306',
-    user     : 'adminjrn4b82',
-    password : '5f6faxtw76eX',
+    host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
+    user     : process.env.OPENSHIFT_MYSQL_DB_USERNAME,
+    password : process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
     database : 'ladyone'
 });
 
@@ -14,4 +14,6 @@ connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
     console.log('The solution is: ', rows[0].solution);
 });
 
-connection.end();
+module.exports = {
+    connection: connection
+};
