@@ -853,8 +853,7 @@
     };
 })(window);
 (function(app) {
-    app.initMenu = function() {
-        var menu = document.querySelector('.menu');
+    app.Menu = function(menu) {
         var wrapper = document.querySelector('.wrapper');
 
         document.querySelector('.menu-button').addEventListener('click', function() {
@@ -868,45 +867,72 @@
 
             wrapper.classList.remove('menu-active');
         });
-    }
+    };
 })(window);
-(function() {
-    var searchForm = document.querySelector('.search');
-    var input = searchForm.querySelector('input');
-    var meta = document.createElement('meta');
+(function(app) {
+    function Search(searchForm) {
+        var input = searchForm.querySelector('input');
+        var meta = document.createElement('meta');
 
-    meta.content = 'width=device-width, initial-scale=1, user-scalable=no';
-    meta.name = 'viewport';
+        //TODO: overview
+        meta.content = 'width=device-width, initial-scale=1, user-scalable=no';
+        meta.name = 'viewport';
 
-    document.querySelector('.icon-search').addEventListener('click', function() {
-        searchForm.classList.add('active');
+        document.querySelector('.icon-search').addEventListener('click', function() {
+            searchForm.classList.add('active');
 
-        if (searchForm.classList.contains('active')) {
-            document.head.appendChild(meta);
-            input.focus();
-        }
-    });
+            if (searchForm.classList.contains('active')) {
+                document.head.appendChild(meta);
+                input.focus();
+            }
+        });
 
-    input.addEventListener('blur', function() {
-        searchForm.classList.remove('active');
-        document.head.removeChild(meta);
-    })
+        input.addEventListener('blur', function() {
+            searchForm.classList.remove('active');
+            document.head.removeChild(meta);
+        });
+    }
+
+    app.Search = Search;
 })(window);
 (function(app) {
     'use strict';
 
     document.addEventListener('DOMContentLoaded', function() {
-        initMenu();
+        runApp();
 
         document.body.classList.remove('preloader');
-
-        console.info('site initialized');
 
         FastClick.attach(document.body, {
             tapDelay: 1,
             tapTimeout: 500
         });
+
+        console.info('site initialized');
     });
+
+    function runApp() {
+        app.modules = {};
+
+        var elements = document.querySelectorAll('[data-module]');
+
+        Array.prototype.forEach.call(elements, function(element) {
+            console.log(element);
+            var moduleName = element.getAttribute('data-module');
+
+            if (moduleName in app.modules) {
+                if (app.modules[moduleName] instanceof Array) {
+
+                } else {
+                    var m = app.modules[moduleName];
+
+                    app.modules[moduleName] = [m, new app[moduleName](element)];
+                }
+            } else {
+                app.modules[moduleName] = new app[moduleName](element);
+            }
+        });
+    }
 })(window);
 (function(app) {
     document.addEventListener('touchstart', function(event) {

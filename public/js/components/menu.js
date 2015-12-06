@@ -1,6 +1,5 @@
 (function(app) {
-    app.initMenu = function() {
-        var menu = document.querySelector('.menu');
+    app.Menu = function(menu) {
         var wrapper = document.querySelector('.wrapper');
 
         document.querySelector('.menu-button').addEventListener('click', function() {
@@ -14,5 +13,5 @@
 
             wrapper.classList.remove('menu-active');
         });
-    }
+    };
 })(window);
