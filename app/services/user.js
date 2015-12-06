@@ -1,6 +1,6 @@
 'use strict';
 
-var db = reuqire('../database');
+var mongoose = reuqire('mongoose');
 var sha256 = require('crypto-js/sha256');
 
 var salt = 'adgjl';

@@ -4,7 +4,10 @@ var express = require('express');
 var fs      = require('fs');
 var ejsLocals = require('ejs-locals');
 var pages = require('./controllers/pages');
+var db = require('./database');
 var app = express();
+var bodyParser = require("body-parser");
+var category = require('./models/category');
 
 /**
  *  Define the sample application.
@@ -25,7 +28,7 @@ var SampleApp = function() {
     self.setupVariables = function() {
         //  Set the environment variables we need.
         self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+        self.port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
         if (typeof self.ipaddress === "undefined") {
             //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -79,6 +82,8 @@ var SampleApp = function() {
     self.initializeServer = function() {
         self.app = express();
 
+        self.app.use(bodyParser.urlencoded({ extended: false }));
+
         self.app.engine('ejs', ejsLocals);
         self.app.set('views', __dirname + '/views');
         self.app.set('view engine', 'ejs');
@@ -88,6 +93,12 @@ var SampleApp = function() {
 
         self.app.get('/', function (req, res) {
             res.redirect('home');
+        });
+
+        self.app.post('/add', function(req) {
+            var c = new category(req.body);
+
+            c.save(function(err, succ) {console.log(1, err, 2, succ)});
         });
 
         self.app.get('/console', function(req, res) {
@@ -110,6 +121,11 @@ var SampleApp = function() {
 
         self.setupVariables();
         self.setupTerminationHandlers();
+
+        db.connect().catch(function(error) {
+            self.terminator(error);
+
+        });
 
         // Create the express server and routes.
         self.initializeServer();

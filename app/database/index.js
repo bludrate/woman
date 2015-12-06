@@ -1,19 +1,26 @@
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-    host     : process.env.OPENSHIFT_MYSQL_DB_HOST,
-    user     : process.env.OPENSHIFT_MYSQL_DB_USERNAME,
-    password : process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
-    database : 'ladyone'
-});
+'use-strict'
 
-connection.connect();
+var mongoose = require('mongoose');
+var Promise = require('promise-polyfill');
 
-connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
-    if (err) throw err;
-
-    console.log('The solution is: ', rows[0].solution);
-});
+// default to a 'localhost' configuration:
+var connection_string = '127.0.0.1:27017/ladyone';
+// if OPENSHIFT env variables are present, use the available connection info:
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME;
+}
 
 module.exports = {
-    connection: connection
+    connect: function() {
+        mongoose.connect(connection_string);
+
+        return new Promise(function(resolve, reject) {
+            mongoose.connection.on('error', reject);
+            mongoose.connection.on('open', resolve);
+        });
+    }
 };

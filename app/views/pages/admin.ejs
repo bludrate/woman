@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .preloader:before {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            left: 0;
+            top: 0;
+            z-index: 9999;
+            text-align: center;
+            box-sizing: border-box;
+            padding: 200px 0 0;
+            font-size: 18px;
+            background: #FFEFFF;
+            content: 'Сайт загружается...';
+        }
+    </style>
+    <title>Мобильный сайт для женщин</title>
+    <meta name="description" content="Полезные статьи на темы: мода, красота, здоровье, семья, мужчины, интим, отношения, отдых. Стань леди №1 с ladyone.in.ua">
+    <meta name="keywords" content="женский сайт, женский портал, мода, красота, здоровье, семья, мужчины, интим, отношения, отдых">
+</head>
+<body class="preloader">
+<div class="wrapper">
+    <form action="#" class="search">
+        <button class="search__button" type="submit">ИСКАТЬ</button>
+        <input type="text" class="search__input"/>
+    </form>
+    <header class="header">
+        <button class="menu-button"><span class="hamburger"></span></button>
+        <button class="icon-search"></button>
+        <a href="/" class="logo">ladyone</a>
+    </header>
+    <div class="content">
+        <form action="/add" method="POST">
+            <label>Name</label>
+            <input type="text" name="name"/>
+            <label>Link</label>
+            <input type="text" name="link"/>
+            <button type="submit">Submit</button>
+        </form>
+        <% for(var i=0; i < items.length; i++) {%>
+            <%= items[i].name %> ___ <%= items[i].link%>
+        <%}%>
+    </div>
+    <div class="menu-page-overlay"></div>
+</div>
+
+<%- include  ../blocks/nav.ejs %>
+<script>document.write('<link rel="stylesheet" href="/public/styles/main.css"/>');</script>
+<script src="/public/js/main.js"></script>
+</body>
+</html>
