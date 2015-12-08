@@ -1,0 +1,29 @@
+<% layout('../admin_layout') -%>
+
+<div data-module="ArticleEditor" class="article-editor">
+    <div class="page-view">
+        <div class="wrapper">
+            <%- include ../blocks/header.ejs %>
+            <div id="view-content" class="content fr-view">
+            </div>
+            <div class="menu-page-overlay"></div>
+        </div>
+
+        <%- include ../blocks/nav.ejs %>
+    </div>
+    <form action="#" id="article-form" class="article-form">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title"/>
+        <label for="description">Description</label>
+        <input type="text" name="description" id="description"/>
+        <label for="content">Content</label>
+        <textarea id="content" name="content"></textarea>
+        <label for="categoryId">Category</label>
+        <select name="categoryId" id="categoryId" class="category-select">
+            <% for(var i=0; i < categories.length; i++) {%>
+            <option value="<%= categories[i]._id %>"><%= categories[i].name %></option>
+            <%}%>
+        </select>
+    </form>
+</div>
+

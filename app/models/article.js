@@ -7,9 +7,7 @@ var schema = mongoose.Schema({
     description: String,
     content: String,
     updateDate: {type: Date, default: Date.now},
-    mainImage: String,
-    categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'},
-    attachedFiles: [String]
+    categoryId: {type: mongoose.Schema.Types.ObjectId, ref: 'Category'}
 });
 
 module.exports = mongoose.model('Article', schema);

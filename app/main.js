@@ -1,13 +1,14 @@
 #!/bin/env node
 //  OpenShift sample Node application
 var express = require('express');
+var requireDir = require('require-dir');
 var fs      = require('fs');
 var ejsLocals = require('ejs-locals');
-var pages = require('./controllers/pages');
+var pages = requireDir('./controllers/pages');
 var db = require('./database');
 var app = express();
 var bodyParser = require("body-parser");
-var category = require('./models/category');
+var models = requireDir('./models');
 
 /**
  *  Define the sample application.
@@ -83,6 +84,7 @@ var SampleApp = function() {
         self.app = express();
 
         self.app.use(bodyParser.urlencoded({ extended: false }));
+        self.app.use(bodyParser.json());
 
         self.app.engine('ejs', ejsLocals);
         self.app.set('views', __dirname + '/views');
@@ -95,18 +97,8 @@ var SampleApp = function() {
             res.redirect('home');
         });
 
-        self.app.post('/add', function(req) {
-            var c = new category(req.body);
-
-            c.save(function(err, succ) {console.log(1, err, 2, succ)});
-        });
-
-        self.app.get('/console', function(req, res) {
-            res.send('host: ' + process.env.OPENSHIFT_MYSQL_DB_HOST + '\n' + 'ur: ' + process.env.OPENSHIFT_MYSQL_DB_URL);
-        });
-
         for (var page in pages) {
-            self.app.get('/' + page, pages[page]);
+            self.app.get('/' + pages[page].url, pages[page].controller);
         }
     };
 

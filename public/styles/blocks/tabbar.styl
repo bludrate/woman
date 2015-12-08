@@ -1,0 +1,40 @@
+.tabbar {
+	&-nav {
+		background: lightgray;
+		padding: 8px 10px 7px;
+		border-bottom: 1px solid gray;
+		white-space: nowrap;
+		overflow: auto;
+		width: 100%;
+		word-spacing: 5px;
+		box-sizing: border-box;
+		margin: 0 0 10px;
+	}
+
+	&-button {
+		border: none;
+		padding: 0 10px;
+		box-sizing: border-box;
+		display: inline-block;
+		vertical-align: top;
+		height: 30px;
+		background: gray;
+		border-radius: 4px;
+		font-size: 16px;
+		line-height: 30px;
+
+		&.active {
+			background: black;
+			color: white;
+		}
+	}
+		
+	&-content {
+		padding: 0 10px;
+		display: none;
+
+		&.active {
+			display: block;
+		}
+	}
+}

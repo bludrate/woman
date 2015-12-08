@@ -849,51 +849,144 @@
                 element.removeEventListener(event, callback, useCapture);
                 _callback(event);
             }
+        },
+
+        send: function(url, method, data) {
+            method = method || 'GET';
+
+            return new Promise(function(resolve, reject) {
+                var xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.onreadystatechange = function() {
+                    if (xmlhttp.readyState === 4) {
+                        if (xmlhttp.status === 200) {
+                            resolve(JSON.parse(xmlhttp.responseText));
+                        } else {
+                            reject(xmlhttp);
+                            console.error('error while getting file from ' + url, xmlhttp);
+                        }
+                    }
+                };
+
+                xmlhttp.open(method, url, true);
+
+                xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                xmlhttp.send(JSON.stringify(data));
+            });
         }
     };
 })(window);
 (function(app) {
-    app.Menu = function(menu) {
-        var wrapper = document.querySelector('.wrapper');
+    function Menu(element) {
+        this.element = element;
+        this.wrapper = document.querySelector('.wrapper');
 
-        document.querySelector('.menu-button').addEventListener('click', function() {
-            menu.classList.add('active');
+        this.init();
+    }
 
-            wrapper.classList.add('menu-active');
-        });
+    Menu.prototype = {
+        init: function() {
+            document.querySelector('.menu-button').addEventListener('click', this.open.bind(this));
+            document.querySelector('.menu-page-overlay').addEventListener('click', this.close.bind(this));
+        },
 
-        document.querySelector('.menu-page-overlay').addEventListener('click', function() {
-            menu.classList.remove('active');
+        open: function() {
+            this.element.classList.add('active');
 
-            wrapper.classList.remove('menu-active');
-        });
+            this.wrapper.classList.add('menu-active');
+        },
+        close: function() {
+            this.element.classList.remove('active');
+
+            this.wrapper.classList.remove('menu-active');
+        }
     };
+
+    app.Menu = Menu;
 })(window);
 (function(app) {
-    function Search(searchForm) {
-        var input = searchForm.querySelector('input');
+    function Search(element) {
+        this.element = element;
+        this.input = element.querySelector('input');
+
+        this.init();
+    }
+
+    Search.prototype = {
+        init: function() {
+            this.meta = createMeta();
+
+            document.querySelector('.icon-search').addEventListener('click', this.open.bind(this));
+
+            this.input.addEventListener('blur', this.close.bind(this));
+        },
+
+        close: function() {
+            this.element.classList.remove('active');
+            document.head.removeChild(this.meta);
+        },
+
+        open: function() {
+            if (this.element.classList.contains('active')) {
+                return ;
+            }
+
+            this.element.classList.add('active');
+
+            document.head.appendChild(this.meta);
+            this.input.focus();
+        }
+    };
+
+    function createMeta() {
         var meta = document.createElement('meta');
 
         //TODO: overview
         meta.content = 'width=device-width, initial-scale=1, user-scalable=no';
         meta.name = 'viewport';
 
-        document.querySelector('.icon-search').addEventListener('click', function() {
-            searchForm.classList.add('active');
+        return meta;
+    }
+    app.Search = Search;
+})(window);
+(function(app) {
 
-            if (searchForm.classList.contains('active')) {
-                document.head.appendChild(meta);
-                input.focus();
-            }
-        });
+    function TabBar(element) {
+        this.element = element;
+        this.links = element.querySelectorAll('.tabbar-button');
+        this.contents = element.querySelectorAll('.tabbar-content');
 
-        input.addEventListener('blur', function() {
-            searchForm.classList.remove('active');
-            document.head.removeChild(meta);
-        });
+        this.init();
     }
 
-    app.Search = Search;
+    TabBar.prototype = {
+        init: function() {
+            this.element.addEventListener('click', function(event) {
+                if (event.target.classList.contains('tabbar-button')) {
+                    var index = Array.prototype.indexOf.call(this.links, event.target);
+
+                    this.toggleTab(index);
+                }
+            }.bind(this));
+
+            this.index = 0;
+            this.links[0].classList.add('active');
+            this.contents[0].classList.add('active');
+        },
+
+        toggleTab: function(index) {
+            this.links[this.index].classList.remove('active');
+            this.contents[this.index].classList.remove('active');
+
+            this.links[index].classList.add('active');
+            this.contents[index].classList.add('active');
+
+            this.index = index;
+        }
+    };
+
+    app.TabBar = TabBar;
 })(window);
 (function(app) {
     'use strict';
@@ -917,7 +1010,6 @@
         var elements = document.querySelectorAll('[data-module]');
 
         Array.prototype.forEach.call(elements, function(element) {
-            console.log(element);
             var moduleName = element.getAttribute('data-module');
 
             if (moduleName in app.modules) {

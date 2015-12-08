@@ -1,26 +1,45 @@
 (function(app) {
-    function Search(searchForm) {
-        var input = searchForm.querySelector('input');
+    function Search(element) {
+        this.element = element;
+        this.input = element.querySelector('input');
+
+        this.init();
+    }
+
+    Search.prototype = {
+        init: function() {
+            this.meta = createMeta();
+
+            document.querySelector('.icon-search').addEventListener('click', this.open.bind(this));
+
+            this.input.addEventListener('blur', this.close.bind(this));
+        },
+
+        close: function() {
+            this.element.classList.remove('active');
+            document.head.removeChild(this.meta);
+        },
+
+        open: function() {
+            if (this.element.classList.contains('active')) {
+                return ;
+            }
+
+            this.element.classList.add('active');
+
+            document.head.appendChild(this.meta);
+            this.input.focus();
+        }
+    };
+
+    function createMeta() {
         var meta = document.createElement('meta');
 
         //TODO: overview
         meta.content = 'width=device-width, initial-scale=1, user-scalable=no';
         meta.name = 'viewport';
 
-        document.querySelector('.icon-search').addEventListener('click', function() {
-            searchForm.classList.add('active');
-
-            if (searchForm.classList.contains('active')) {
-                document.head.appendChild(meta);
-                input.focus();
-            }
-        });
-
-        input.addEventListener('blur', function() {
-            searchForm.classList.remove('active');
-            document.head.removeChild(meta);
-        });
+        return meta;
     }
-
     app.Search = Search;
 })(window);

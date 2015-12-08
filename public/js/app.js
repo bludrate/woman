@@ -20,7 +20,6 @@
         var elements = document.querySelectorAll('[data-module]');
 
         Array.prototype.forEach.call(elements, function(element) {
-            console.log(element);
             var moduleName = element.getAttribute('data-module');
 
             if (moduleName in app.modules) {
