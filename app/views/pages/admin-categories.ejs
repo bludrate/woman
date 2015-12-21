@@ -1,0 +1,34 @@
+<% layout('../admin_layout') -%>
+
+<div data-module="CategoriesEditor">
+    <ul>
+        <table id="categories-table" class="categories-table">
+            <thead>
+                <th>Название</th>
+                <th>Ссылка</th>
+            </thead>
+            <%for (var i = 0; i < categories.length; i++) {%>
+            <tr id="<%=categories[i]._id%>">
+                <td><input type="text" name="name" value="<%=categories[i].name%>"/></td>
+                <td><input type="text" name="link" value="<%=categories[i].link%>"/></td>
+                <td><button class="remove">remove</button></td>
+            </tr>
+            <%}%>
+        </table>
+        <form class="add-category" id="add-form">
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" name="name" placeholder="Название"/>
+                    </td>
+                    <td>
+                        <input type="text" name="link" placeholder="Ссылка"/>
+                    </td>
+                    <td>
+                        <button class="add-category__button" type="submit">Добавить</button>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </ul>
+</div>

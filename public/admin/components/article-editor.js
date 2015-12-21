@@ -11,22 +11,38 @@
         init: function() {
             this.element.addEventListener('change', this.updateView.bind(this));
             $('#content').froalaEditor().on('froalaEditor.contentChanged', this.updateView.bind(this));
+            this.form.addEventListener('submit', this.save.bind(this));
+        },
+
+        save: function(event) {
+            event.preventDefault();
+
+            var data = this.serialize();
+
+            app.utils.send('/admin/article', 'PUT', data).then(function(article) {
+                console.log('new article', article);
+                this.form.reset();
+            }.bind(this));
         },
 
         serialize: function() {
-            var data = {};
-
-            data.title = this.form.title.value.trim();
-            data.description = this.form.description.value.trim();
-            data.categoryId = this.form.categoryId.value;
+            return {
+                id: this.form.id.value,
+                title: this.form.title.value.trim(),
+                teaser: this.form.teaser.value.trim(),
+                categoryId: this.form.categoryId.value,
+                content: this.form.content.value.trim()
+            };
         },
 
         updateView: function() {
+            var data = this.serialize();
+
             var html = '<div class="article">';
 
-            html += '<div class="article__title">' + this.form.title.value + '</div>';
-            html += '<div class="article__description">' + this.form.description.value + '</div>';
-            html += '<div class="article__content">' + this.form.content.value + '</div>';
+            html += '<div class="article__title">' + data.title + '</div>';
+            html += '<div class="article__teaser">' + data.teaser + '</div>';
+            html += '<div class="article__content">' + data.content + '</div>';
 
             this.viewContent.innerHTML = html + '</div>';
         }

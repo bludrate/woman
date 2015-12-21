@@ -1,0 +1,8 @@
+<div class="article-list">
+    <%for (var i=0; i < articles.length; i++) {%>
+    <article class="article-list__item">
+        <h1><%=articles[i].title%></h1>
+        <div><%-articles[i].content%></div>
+    </article>
+    <%}%>
+</div>

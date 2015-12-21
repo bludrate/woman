@@ -97,6 +97,50 @@ var SampleApp = function() {
             res.redirect('home');
         });
 
+        self.app.delete('/admin/categories', function(req, res) {
+            models.category.remove({_id: req.body.id}, function(err, data) {
+                if (!err) {
+                    res.send(data);
+                }
+            });
+        });
+
+        self.app.put('/admin/article', function(req, res) {
+            if (req.body.id === 'new' || !req.body.id) {
+                var article = new models.article(req.body);
+
+                article.save(function(err, newArticle) {
+                    if (!err) {
+                        res.send(newArticle);
+                    }
+                });
+            } else {
+                models.article.update({_id: req.body.id}, req.body, function(err, newArticle) {
+                    if (!err) {
+                        res.send(newArticle);
+                    }
+                });
+            }
+        });
+
+        self.app.put('/admin/categories', function(req, res) {
+            if (req.body.id) {
+                models.category.update({_id: req.body.id}, req.body, function(err, newCategory) {
+                    if (!err) {
+                        res.send(newCategory);
+                    }
+                });
+            } else {
+                var category = new models.category(req.body);
+
+                category.save(function(err, newCategory) {
+                    if (!err) {
+                        res.send(newCategory);
+                    }
+                });
+            }
+        });
+
         for (var page in pages) {
             self.app.get('/' + pages[page].url, pages[page].controller);
         }
